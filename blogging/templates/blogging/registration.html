@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Task2</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+  <div class="navbar-brand" style="width:100%">
+
+    <ul class="navbar-nav">
+        <li>Blogging Site </li>
+
+    </ul>
+      <h3 class="navbar-nav justify-content-end" align="right"></h3>
+  </div>
+
+</nav>
+    <br><br>
+
+ <br><br>
+
+ <div class="container">
+        <div class="alert alert-primary" role="alert">
+            <center>REGISTER YOURSELF HERE AND GET STARTED!</center>
+</div>
+        <br><br>
+    <form method="post" id="form" enctype="multipart/form-data" action="/blogging/register_success">
+        {% csrf_token %}
+
+        Username  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        {{form.username}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <br>
+           <div style="color:red" class="usererr">{{usererr}}</div>
+        <br>
+
+        Enter Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{form.password}}
+        <br>
+           <div style="color:red" class="pass_error">{{pass_error}}</div>
+        <br>
+        Re-enter Paswword:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{form.conform_password}}
+        <br>
+
+        <br>
+
+        <label><u>Captcha code</u></label> <div style="background-color:green; width:15%;">{{captcha}} = ?</div>
+        <br><br>
+        <label>Enter the result:</label>
+        <input type="text" id="captcha_input">
+       <br>
+        <div style="color:red" class="err">{{error}}</div><br>
+        <center> <button type="submit" class="btn btn-primary" id="register">Register</button></center><br><br>
+
+    </form>
+        </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+   <script>
+        var allowsubmit = false;
+        $(function(){
+
+         $(document).ready(function(){
+            $('#userfield').val('');
+            });
+
+
+
+
+
+            $('#userfield').on('keyup',function(e){
+                var username = $(this).val();
+                var letters = /^[0-9a-zA-Z]{8,}$/;
+
+                if(!username.match(letters))
+                {
+                $('#register').attr('disabled',true)
+                $('.usererr').text('Please input alphanumeric characters and length should be greater than 7')
+                return
+
+
+                }
+                $('.usererr').text('')
+                 $('#register').attr('disabled',false)
+
+
+                console.log(username)
+                $.ajax({
+                type:'POST',
+                url:'/blogging/ajax/validate_username/',
+                data:{
+                    'username' : username,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function(data){
+                console.log(data.is_taken)
+                    if(data.is_taken){
+                        $('.usererr').text('Username is already taken')
+                        $('#register').attr('disabled',true)
+
+                    }
+                    if(!data.is_taken){
+                     $('.usererr').text('')
+                     $('#register').attr('disabled',false)
+                    }
+                    }
+                });
+
+            });
+
+            //onkeypress
+            $('#newpass,#confpass').keyup(function(e){
+            //get values
+            var pwd= $('#newpass').val();
+            var confpwd=$('#confpass').val();
+
+            if(pwd == confpwd){
+                $('.pass_error').text('');
+                   $('#register').attr('disabled',false)
+
+            }else{
+            $('.pass_error').text('password not matching');
+               $('#register').attr('disabled',true)
+            }
+            });
+
+             $("#username").keyup(function (e) {
+
+
+        });
+
+
+            $('#form').submit(function()
+            {
+            if ($('#captcha_input').val()!= {{result}})
+            {
+            $('.err').text('Invalid captcha result please try again')
+            return false;
+            }
+
+
+
+
+
+
+            });
+
+
+            });
+
+
+
+    </script>
+
+  </body>
+</html>

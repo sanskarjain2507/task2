@@ -1,0 +1,47 @@
+{% extends 'basecode.html' %}
+{% block body %}
+{% if user == 'absent' %}
+<center><h3>No user exist with this name!</h3></center>
+{% else %}
+{% if has_blogs == 'no' %}
+<center><h3>This user have no blogs currently!</h3></center>
+{% else %}
+<div class="container">
+    <center><h3><b><u>{{guest_username}} Blogs</u></b></h3></center><br><br>
+    {% for blog in blogs %}
+        <div  class="div_blg " style="border-style:outset; border-color:red;">
+            <center> <br><b><u><h3>BLOG</h3></u></b></center>
+            <hr size="10" color="green">
+            <br>
+            <h4><b><u>Description</u></b></h4>
+                                {{ blog.description }}
+                         <hr size="10" color="green">
+
+                    <img src="/media/{{blog.image}}" height="250px" width="100%">
+                                 <hr size="10" color="green">
+            <table><tr><td>
+                <h5><b><u>Scope: </u></b></h5></td>
+                <td>{{blog.scope}}</td>
+            </tr>
+
+            </table>
+                    <hr size="10" color="green">
+          <table><tr><td>
+                <h5><b><u>Published on:  </u></b></h5></td>
+                <td>{{blog.timestamp}}</td>
+            </tr>
+
+            </table>
+        </div>
+    <br><br>
+                    {% endfor %}
+
+
+
+
+
+</div>
+
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'basecode.html' %}
+{% block create_blog %}active{% endblock %}
+{% block body %}
+     <div class="container">
+         <center> <h3><b><u>Blog post form</u></b></h3></center><br><br>
+ <form method="post" id="form" enctype="multipart/form-data" action="/blogging/on_submit_blog">
+        {% csrf_token %}
+
+     <input type="hidden" name="username" value="{{username}}">
+        Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <textarea class="form-control" required name='description' id="desc" rows="3"></textarea>
+
+
+        <br><br>
+        Blog Image:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        {{form.image}}
+        <br>
+
+         <br>
+        Scope:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <br>
+       <select name="scope" class="custom-select" required>
+
+
+            <option value="public">PUBLIC</option>
+            <option value="private" selected>PRIVATE</option>
+</select>
+
+<br>
+<br>
+         <center> <button type="submit" class="btn btn-primary" id="register">Register</button></center><br><br>
+        <div style="color:red">{{error}}</div>
+
+    </form>
+</div>
+
+{% endblock %}
