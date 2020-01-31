@@ -91,6 +91,9 @@ def register_success(request):
             en_pass=encrypt(password)
             user=User_data(username=username,password=en_pass)
             user.save()
+            User.objects.create_user(username=username,password=password)
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
             param={'username':username}
             return render(request,'blogging/homepage.html',param)
         else:
